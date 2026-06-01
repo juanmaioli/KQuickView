@@ -9,6 +9,7 @@ Servicio receptor asíncrono de alto rendimiento programado en **Rust**, diseña
 Este daemon reemplaza y optimiza la lógica del sistema original desarrollado en Visual Basic 6, aportando las siguientes ventajas tecnológicas:
 
 *   **⚡ Concurrencia Total:** Procesamiento asíncrono y concurrente de tramas en hilos independientes mediante `tokio::spawn`. La recepción UDP principal es completamente no bloqueante y robusta ante fallos de red.
+*   **🔌 Resiliencia de BD:** Reintentos progresivos al inicio (hasta 10 intentos espaciados por 5 segundos) y control robusto de timeouts de conexiones en el pool de `sqlx` para soportar reinicios del motor MySQL de forma asíncrona.
 *   **🔒 Criptografía AES-128-ECB:** Rutinas de descifrado y cifrado simétrico integradas en `crypto.rs` para asegurar la compatibilidad bidireccional y el correcto envío de confirmaciones (ACKs) al hardware NETIO.
 *   **🗄️ Persistencia Dinámica (MySQL):** Creación y mantenimiento automático de tablas mensuales con el esquema exacto de producción histórica (`rep_YYYYM` sin ceros a la izquierda, por ejemplo: `rep_20265`).
 *   **🧠 Mapeo Contact ID e Índices Corregidos:** Decodificación alineada al 100% con los offsets de la central (offsets reales basados en la lógica original `base = 5`).
@@ -60,6 +61,36 @@ cargo build --release
 
 ---
 
-### 4. 🧠 Desarrollado por
+### 4. 🛠️ Despliegue como Servicio Systemd (Debian 13)
+
+Para sistemas de producción como **Debian 13**, el proyecto incluye un script automatizado y autodetectable llamado [instalar_servicio.sh](file:///home/juan/Documentos/Dev/Apps/Ipcom/receptor/instalar_servicio.sh) que configura el daemon para que corra como un servicio de fondo continuo y robusto.
+
+#### Pasos para la instalación:
+1. Navegá a la carpeta donde resides tu binario compilado y configuración (`.env`):
+   ```bash
+   cd /ruta/a/tu/ReceptorIpCom/
+   ```
+2. Ejecutá el script de instalación automática:
+   ```bash
+   ./instalar_servicio.sh
+   ```
+
+El instalador creará el archivo de unidad `/etc/systemd/system/receptor.service`, configurará el arranque automático con reinicios en caso de fallos y cargará los daemon de systemd.
+
+#### Comandos útiles para la gestión del servicio:
+```bash
+# Iniciar el servicio
+sudo systemctl start receptor.service
+
+# Detener el servicio
+sudo systemctl stop receptor.service
+
+# Ver logs en tiempo real (monitoreo de tramas entrantes)
+sudo journalctl -u receptor.service -f
+```
+
+---
+
+### 5. 🧠 Desarrollado por
 *   **Juan Gabriel Maioli** — *Desarrollador y Propietario del Proyecto*
 *   *Antigravity AI* — *Asistente de Codificación*
