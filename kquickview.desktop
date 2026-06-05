@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=all/allfiles;
+Actions=kquickview;
+X-KDE-Priority=TopLevel
+
+[Desktop Action kquickview]
+Name=Previsualizar con K&QuickView
+Name[es]=Previsualizar con K&QuickView
+Icon=document-preview
+Exec=kquickview %f
