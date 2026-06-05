@@ -34,29 +34,32 @@ sudo apt install -y qt6-base-dev qt6-declarative-dev qt6-pdf-dev qml6-module-qtq
 
 ## 3. 🚀 Compilación e Instalación
 
-1. **Compilar el binario:**
+Para simplificar el proceso, se incluye un script automatizado `install.sh` que compila la aplicación en modo optimizado y la instala junto con sus componentes en tu directorio de usuario.
+
+1. **Ejecutar el instalador:**
    ```bash
-   cargo build --release
+   ./install.sh
    ```
 
-2. **Integrar con Dolphin (Menú Contextual):**
-   El archivo de Dolphin Service Menu se instala copiándolo a tu directorio de servicios local:
-   ```bash
-   mkdir -p ~/.local/share/kio/servicemenus/
-   cp kquickview.desktop ~/.local/share/kio/servicemenus/
-   ```
+2. **Destinos de instalación de los componentes:**
 
-3. **Configurar el Atajo Global (Meta+Espacio):**
-   Dado que Dolphin no permite asignar atajos a Service Menus en todas las versiones:
-   * Ve a **Preferencias del Sistema de KDE** -> **Atajos** -> **Añadir nuevo** -> **Comando**.
+| Componente | Archivo de Origen | Ruta de Destino en el Sistema |
+| :--- | :--- | :--- |
+| **Binario ejecutable** | `target/release/kquickview` | `~/.local/bin/kquickview` |
+| **Script disparador de atajo** | `kquickview-selected.sh` | `~/.local/bin/kquickview-selected.sh` |
+| **Menú contextual (Dolphin)** | `kquickview.desktop` | `~/.local/share/kio/servicemenus/kquickview.desktop` |
+| **Acceso directo de aplicación** | `kquickview-app.desktop` | `~/.local/share/applications/kquickview.desktop` |
+
+3. **Configurar el Atajo Global (Meta+Espacio) en KDE Plasma:**
+   Dado que Dolphin no permite asignar atajos directos a los Service Menus de forma nativa en todas las versiones:
+   * Abrí las **Preferencias del Sistema** de KDE.
+   * Navegá a **Atajos** -> **Añadir nuevo** -> **Comando**.
    * Nombre: `KQuickView - Previsualizar`
-   * Comando: `/home/juan/Documentos/Dev/Apps/KQuickView/kquickview-selected.sh`
-   * Asignale el atajo **Meta+Espacio** (o la combinación que prefieras).
+   * Comando: `/home/juan/.local/bin/kquickview-selected.sh`
+   * Asignale la combinación de teclas **Meta+Espacio** (o la combinación que prefieras).
 
-   El script detectará automáticamente si estás en Dolphin y obtendrá el archivo seleccionado de forma segura.
-
-4. **Icono Personalizado:**
-   La aplicación utiliza el icono de lupa emoji de Apple (`right-pointing_magnifying_glass.png`) para integrarse de forma elegante con la barra de tareas de KDE Plasma.
+4. **Icono de la Ventana:**
+   La aplicación y su menú de Dolphin se asocian automáticamente con el icono de la lupa emoji (`right-pointing_magnifying_glass.png`) configurado en el archivo desktop local.
 
 ---
 

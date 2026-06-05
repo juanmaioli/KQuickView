@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=KQuickView
+Comment=Previsualizador rápido para KDE Plasma
+Exec=__EXEC_PATH__ %f
+Icon=/home/juan/Documentos/Dev/Apps/Emoji/AppleColorEmoji_extracted/others/right-pointing_magnifying_glass.png
+Terminal=false
+Categories=Utility;
+NoDisplay=true

@@ -41,7 +41,11 @@ if [[ "$ACTIVE_WINDOW_NAME" == *"Dolphin"* ]]; then
         FILE_PATH=$(echo "$FILE_URI" | sed 's|^file://||' | python3 -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.stdin.read().strip()))")
         
         if [ -f "$FILE_PATH" ] || [ -d "$FILE_PATH" ]; then
-            /home/juan/Documentos/Dev/Apps/KQuickView/target/release/kquickview "$FILE_PATH"
+            KQUICKVIEW_BIN="$HOME/.local/bin/kquickview"
+            if [ ! -f "$KQUICKVIEW_BIN" ]; then
+                KQUICKVIEW_BIN="kquickview"
+            fi
+            "$KQUICKVIEW_BIN" "$FILE_PATH"
         fi
     fi
 fi

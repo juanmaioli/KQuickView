@@ -1,5 +1,0 @@
-Hola Juan!
-Esta es una prueba de previsualización de texto plano usando KQuickView en Rust y Qt/QML.
-El sistema lee el archivo de manera eficiente y la interfaz lo renderiza con una tipografía monoespaciada muy clara.
-
-¡Parece que funciona espectacular!
