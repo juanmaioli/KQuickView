@@ -17,25 +17,31 @@ if [[ "$ACTIVE_WINDOW_NAME" == *"Dolphin"* ]]; then
     # Limpiar portapapeles temporalmente
     xclip -selection clipboard /dev/null
 
-    # Simular Ctrl+C limpiando las teclas modificadoras físicas (como Meta/Super)
+    # Simular Ctrl+C limpiando teclas modificadoras físicas
     xdotool key --clearmodifiers ctrl+c
-    sleep 0.15 # Esperar a que se actualice el portapapeles
 
-    # Obtener el contenido copiado
-    FILE_URI=$(xclip -selection clipboard -o 2>/dev/null)
+    # Espera activa inteligente (polling ultrarrápido cada 10ms, máximo 150ms)
+    FILE_URI=""
+    for i in {1..15}; do
+        FILE_URI=$(xclip -selection clipboard -o 2>/dev/null)
+        if [[ "$FILE_URI" == file://* ]]; then
+            break
+        fi
+        sleep 0.01
+    done
 
     # Restaurar el portapapeles original
     if [ -n "$PREV_CLIPBOARD" ]; then
         echo -n "$PREV_CLIPBOARD" | xclip -selection clipboard 2>/dev/null
     fi
 
-    # 3. Validar y abrir KQuickView
+    # 3. Validar y abrir KQuickView en modo RELEASE (máxima velocidad)
     if [[ "$FILE_URI" == file://* ]]; then
         # Remover prefijo file:// y decodificar caracteres especiales como %20
         FILE_PATH=$(echo "$FILE_URI" | sed 's|^file://||' | python3 -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.stdin.read().strip()))")
         
         if [ -f "$FILE_PATH" ] || [ -d "$FILE_PATH" ]; then
-            /home/juan/Documentos/Dev/Apps/KQuickView/target/debug/kquickview "$FILE_PATH"
+            /home/juan/Documentos/Dev/Apps/KQuickView/target/release/kquickview "$FILE_PATH"
         fi
     fi
 fi
