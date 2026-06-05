@@ -9,5 +9,5 @@ X-KDE-Priority=TopLevel
 [Desktop Action kquickview]
 Name=Previsualizar con K&QuickView
 Name[es]=Previsualizar con K&QuickView
-Icon=/home/juan/Documentos/Dev/Apps/Emoji/AppleColorEmoji_extracted/others/right-pointing_magnifying_glass.png
+Icon=kquickview
 Exec=kquickview %f

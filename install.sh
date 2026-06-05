@@ -21,15 +21,19 @@ echo -e "${BLUE}[2/5] Creando directorios del sistema de usuario...${NC}"
 mkdir -p "$HOME/.local/bin"
 mkdir -p "$HOME/.local/share/kio/servicemenus"
 mkdir -p "$HOME/.local/share/applications"
+mkdir -p "$HOME/.local/share/icons"
 
 # 3. Copiar ejecutables y dar permisos
-echo -e "${BLUE}[3/5] Instalando binarios y scripts en ~/.local/bin/...${NC}"
+echo -e "${BLUE}[3/5] Instalando binarios, scripts e iconos...${NC}"
 cp target/release/kquickview "$HOME/.local/bin/kquickview"
 chmod +x "$HOME/.local/bin/kquickview"
 
 # Copiar el script disparador de atajo de teclado
 cp kquickview-selected.sh "$HOME/.local/bin/kquickview-selected.sh"
 chmod +x "$HOME/.local/bin/kquickview-selected.sh"
+
+# Copiar e instalar el icono de la lupa en el sistema
+cp right-pointing_magnifying_glass.png "$HOME/.local/share/icons/kquickview.png"
 
 # 4. Configurar e instalar el menú contextual de Dolphin (Service Menu)
 echo -e "${BLUE}[4/5] Instalando el menú contextual para Dolphin...${NC}"
