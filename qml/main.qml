@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Pdf
 import kquickview 1.0
 
 Window {
@@ -85,52 +84,32 @@ Window {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        // 1. Vista de Imagen
-        Image {
-            id: imageView
+        // Loader dinámico para Lazy Loading (evita cargar QtQuick.Pdf si no se visualizan PDFs)
+        Loader {
+            id: contentLoader
             anchors.fill: parent
-            anchors.margins: 16
-            fillMode: Image.PreserveAspectFit
-            source: bridge.file_type === "image" ? bridge.file_url : ""
-            visible: bridge.file_type === "image"
-            asynchronous: true
-        }
+            
+            source: {
+                if (bridge.file_type === "image") return "ImageViewer.qml";
+                if (bridge.file_type === "text") return "TextViewer.qml";
+                if (bridge.file_type === "pdf") return "PdfViewer.qml";
+                return "";
+            }
 
-        // 2. Vista de Texto Plano
-        ScrollView {
-            id: textView
-            anchors.fill: parent
-            anchors.margins: 16
-            visible: bridge.file_type === "text"
-
-            TextArea {
-                text: bridge.text_content
-                readOnly: true
-                selectByMouse: true
-                color: "#eff0f1"
-                font.family: "monospace"
-                font.pointSize: 10
-                background: Rectangle {
-                    color: "#181818"
-                    radius: 4
-                    border.color: "#2a2a2a"
+            onLoaded: {
+                if (item) {
+                    if (bridge.file_type === "image") {
+                        item.fileUrl = bridge.file_url;
+                    } else if (bridge.file_type === "pdf") {
+                        item.fileUrl = bridge.file_url;
+                    } else if (bridge.file_type === "text") {
+                        item.textContent = bridge.text_content;
+                    }
                 }
-                padding: 12
-                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
             }
         }
 
-        // 3. Vista de PDF
-        PdfMultiPageView {
-            id: pdfView
-            anchors.fill: parent
-            visible: bridge.file_type === "pdf"
-            document: PdfDocument {
-                source: bridge.file_type === "pdf" ? bridge.file_url : ""
-            }
-        }
-
-        // 4. Vista de Fallback / Archivo no Soportado
+        // Vista de Fallback / Archivo no Soportado (sólo si no es un tipo conocido)
         Column {
             anchors.centerIn: parent
             spacing: 16
