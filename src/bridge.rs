@@ -42,6 +42,38 @@ pub struct KQuickViewBridgeRust {
     current_idx: usize,
 }
 
+fn render_markdown(content: &str) -> String {
+    use pulldown_cmark::{html, Options, Parser};
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_FOOTNOTES);
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+    options.insert(Options::ENABLE_TASKLISTS);
+
+    let parser = Parser::new_ext(content, options);
+    let mut html_output = String::new();
+    html::push_html(&mut html_output, parser);
+
+    let css = "<style>
+        body { color: #eff0f1; font-family: sans-serif; font-size: 13px; line-height: 1.5; background-color: #121212; }
+        h1, h2, h3, h4 { color: #3daee9; margin-top: 15px; margin-bottom: 8px; font-weight: bold; }
+        h1 { font-size: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 4px; }
+        h2 { font-size: 16px; border-bottom: 1px solid #2a2a2a; padding-bottom: 2px; }
+        h3 { font-size: 14px; }
+        code { font-family: monospace; background-color: #2a2a2a; padding: 2px 4px; color: #e74c3c; }
+        pre { background-color: #1a1a1a; padding: 8px; border: 1px solid #2a2a2a; }
+        pre code { background-color: transparent; padding: 0; color: #eff0f1; }
+        a { color: #3daee9; text-decoration: none; }
+        ul, ol { margin-top: 5px; margin-bottom: 5px; padding-left: 20px; }
+        li { margin-bottom: 2px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; margin-bottom: 10px; }
+        th, td { border: 1px solid #2a2a2a; padding: 6px; text-align: left; }
+        th { background-color: #1a1a1a; color: #3daee9; }
+    </style>";
+
+    format!("<html><head>{}</head><body>{}</body></html>", css, html_output)
+}
+
 impl Default for KQuickViewBridgeRust {
     fn default() -> Self {
         let args: Vec<String> = std::env::args().collect();
@@ -100,10 +132,25 @@ impl Default for KQuickViewBridgeRust {
         let mime = mime_guess::from_path(&abs_path).first_or_octet_stream();
         let mime_str = mime.to_string();
 
+        let is_md = abs_path.extension()
+            .map(|ext| ext.to_string_lossy().to_lowercase())
+            .map(|ext| ext == "md" || ext == "markdown")
+            .unwrap_or(false)
+            || mime_str == "text/markdown"
+            || mime_str == "text/x-markdown";
+
         let mut file_type = "unknown";
         let mut text_content = String::new();
 
-        if mime_str.starts_with("image/") {
+        if is_md {
+            file_type = "markdown";
+            if let Ok(mut file) = File::open(&abs_path) {
+                let mut content = String::new();
+                if file.read_to_string(&mut content).is_ok() {
+                    text_content = render_markdown(&content);
+                }
+            }
+        } else if mime_str.starts_with("image/") {
             file_type = "image";
         } else if mime_str.starts_with("text/") 
             || mime_str == "application/json" 
@@ -207,10 +254,25 @@ impl qobject::KQuickViewBridge {
         let mime = mime_guess::from_path(&path_buf).first_or_octet_stream();
         let mime_str = mime.to_string();
 
+        let is_md = path_buf.extension()
+            .map(|ext| ext.to_string_lossy().to_lowercase())
+            .map(|ext| ext == "md" || ext == "markdown")
+            .unwrap_or(false)
+            || mime_str == "text/markdown"
+            || mime_str == "text/x-markdown";
+
         let mut file_type = "unknown";
         let mut text_content = String::new();
 
-        if mime_str.starts_with("image/") {
+        if is_md {
+            file_type = "markdown";
+            if let Ok(mut file) = File::open(&path_buf) {
+                let mut content = String::new();
+                if file.read_to_string(&mut content).is_ok() {
+                    text_content = render_markdown(&content);
+                }
+            }
+        } else if mime_str.starts_with("image/") {
             file_type = "image";
         } else if mime_str.starts_with("text/") 
             || mime_str == "application/json" 

@@ -115,6 +115,7 @@ Window {
                 if (bridge.file_type === "image") return "ImageViewer.qml";
                 if (bridge.file_type === "text") return "TextViewer.qml";
                 if (bridge.file_type === "pdf") return "PdfViewer.qml";
+                if (bridge.file_type === "markdown") return "MarkdownViewer.qml";
                 return "";
             }
         }

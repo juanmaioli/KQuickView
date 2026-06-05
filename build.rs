@@ -9,6 +9,7 @@ fn main() {
                 "qml/ImageViewer.qml",
                 "qml/TextViewer.qml",
                 "qml/PdfViewer.qml",
+                "qml/MarkdownViewer.qml",
             ]),
     )
     .file("src/bridge.rs")
