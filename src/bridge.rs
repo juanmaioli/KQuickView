@@ -83,7 +83,8 @@ impl Default for KQuickViewBridgeRust {
                 if let Ok(entry) = entry {
                     let p = entry.path();
                     if p.is_file() {
-                        files.push(p);
+                        let canon_p = p.canonicalize().unwrap_or_else(|_| p.clone());
+                        files.push(canon_p);
                     }
                 }
             }

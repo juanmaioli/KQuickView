@@ -27,18 +27,22 @@ Window {
     // Atajos de navegación con flechas de cursor
     Shortcut {
         sequence: "Left"
+        context: Qt.ApplicationShortcut
         onActivated: bridge.previous_file()
     }
     Shortcut {
         sequence: "Up"
+        context: Qt.ApplicationShortcut
         onActivated: bridge.previous_file()
     }
     Shortcut {
         sequence: "Right"
+        context: Qt.ApplicationShortcut
         onActivated: bridge.next_file()
     }
     Shortcut {
         sequence: "Down"
+        context: Qt.ApplicationShortcut
         onActivated: bridge.next_file()
     }
 
