@@ -11,7 +11,7 @@ Una herramienta de previsualización ultrarrápida y liviana para **KDE Plasma**
     *   **Imágenes:** Carga asíncrona inteligente.
     *   **Texto Plano:** Renderizado rápido con tipografía monoespaciada clara (soporta UTF-8 y fallbacks).
     *   **PDF:** Renderizado nativo integrado usando el módulo oficial `QtQuick.Pdf`.
-*   ⌨️ **Control por Teclado:** Cierre rápido de la ventana flotante presionando `Esc` o `Meta+Espacio`.
+*   ⌨️ **Control por Teclado:** Navegación entre archivos adyacentes de la misma carpeta con las flechas de dirección (◄/►/▲/▼) y cierre rápido presionando `Esc` o `Meta+Espacio`.
 
 ---
 
