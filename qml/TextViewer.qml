@@ -2,12 +2,11 @@ import QtQuick
 import QtQuick.Controls
 
 ScrollView {
-    property string textContent: ""
     anchors.fill: parent
     anchors.margins: 16
 
     TextArea {
-        text: textContent
+        text: bridge.text_content
         readOnly: true
         selectByMouse: true
         color: "#eff0f1"

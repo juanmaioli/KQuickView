@@ -117,18 +117,6 @@ Window {
                 if (bridge.file_type === "pdf") return "PdfViewer.qml";
                 return "";
             }
-
-            onLoaded: {
-                if (item) {
-                    if (bridge.file_type === "image") {
-                        item.fileUrl = bridge.file_url;
-                    } else if (bridge.file_type === "pdf") {
-                        item.fileUrl = bridge.file_url;
-                    } else if (bridge.file_type === "text") {
-                        item.textContent = bridge.text_content;
-                    }
-                }
-            }
         }
 
         // Vista de Fallback / Archivo no Soportado (sólo si no es un tipo conocido)
