@@ -24,6 +24,24 @@ Window {
         onActivated: Qt.quit()
     }
 
+    // Atajos de navegación con flechas de cursor
+    Shortcut {
+        sequence: "Left"
+        onActivated: bridge.previous_file()
+    }
+    Shortcut {
+        sequence: "Up"
+        onActivated: bridge.previous_file()
+    }
+    Shortcut {
+        sequence: "Right"
+        onActivated: bridge.next_file()
+    }
+    Shortcut {
+        sequence: "Down"
+        onActivated: bridge.next_file()
+    }
+
     // Cabecera superior premium
     Rectangle {
         id: header
@@ -68,7 +86,7 @@ Window {
         }
 
         Text {
-            text: "Cerrar con Esc o Meta+Espacio"
+            text: "Navegar con ◄ / ► / ▲ / ▼  |  Cerrar con Esc o Meta+Espacio"
             color: "#7f8c8d"
             font.pointSize: 9
             anchors.right: parent.right
