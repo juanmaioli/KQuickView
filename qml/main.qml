@@ -168,4 +168,8 @@ Window {
             }
         }
     }
+
+    Component.onCompleted: {
+        window.requestActivate();
+    }
 }
