@@ -12,6 +12,47 @@ NC='\033[0m' # Sin color
 
 echo -e "${BLUE}=== Iniciando instalación de KQuickView ===${NC}"
 
+# 0. Verificar dependencias del sistema
+echo -e "${BLUE}Verificando dependencias del sistema...${NC}"
+REQUIRED_CMDS=("cargo" "xdotool" "xclip" "pkg-config")
+MISSING_CMDS=()
+for cmd in "${REQUIRED_CMDS[@]}"; do
+    command -v "$cmd" &> /dev/null || MISSING_CMDS+=("$cmd")
+done
+
+REQUIRED_PKGS=("qt6-base-dev" "qt6-declarative-dev" "qt6-pdf-dev" "qml6-module-qtquick-pdf" "build-essential")
+MISSING_PKGS=()
+for pkg in "${REQUIRED_PKGS[@]}"; do
+    dpkg -l "$pkg" &> /dev/null || MISSING_PKGS+=("$pkg")
+done
+
+APT_TO_INSTALL=()
+for cmd in "${MISSING_CMDS[@]}"; do
+    if [ "$cmd" = "cargo" ]; then
+        APT_TO_INSTALL+=("cargo")
+    else
+        APT_TO_INSTALL+=("$cmd")
+    fi
+done
+for pkg in "${MISSING_PKGS[@]}"; do
+    APT_TO_INSTALL+=("$pkg")
+done
+
+if [ ${#APT_TO_INSTALL[@]} -ne 0 ]; then
+    echo -e "${YELLOW}Se detectaron dependencias faltantes: ${RED}${APT_TO_INSTALL[*]}${NC}"
+    read -p "¿Deseás instalar las dependencias faltantes usando apt? (s/n): " respuesta
+    if [[ "$respuesta" =~ ^[Ss]$ ]]; then
+        echo -e "${BLUE}Actualizando índices de paquetes...${NC}"
+        sudo apt update
+        echo -e "${BLUE}Instalando dependencias...${NC}"
+        sudo apt install -y "${APT_TO_INSTALL[@]}"
+    else
+        echo -e "${RED}Instalación cancelada por falta de dependencias.${NC}"
+        exit 1
+    fi
+fi
+
+
 # 1. Compilar el proyecto en modo Release
 echo -e "${BLUE}[1/5] Compilando KQuickView en modo Release...${NC}"
 cargo build --release
