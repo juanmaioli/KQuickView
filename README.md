@@ -46,7 +46,6 @@ Para simplificar el proceso, se incluye un script automatizado `install.sh` que 
 | Componente | Archivo de Origen | Ruta de Destino en el Sistema |
 | :--- | :--- | :--- |
 | **Binario ejecutable** | `target/release/kquickview` | `~/.local/bin/kquickview` |
-| **Script disparador de atajo** | `kquickview-selected.sh` | `~/.local/bin/kquickview-selected.sh` |
 | **Menú contextual (Dolphin)** | `kquickview.desktop` | `~/.local/share/kio/servicemenus/kquickview.desktop` |
 | **Acceso directo de aplicación** | `kquickview-app.desktop` | `~/.local/share/applications/kquickview.desktop` |
 
@@ -55,7 +54,7 @@ Para simplificar el proceso, se incluye un script automatizado `install.sh` que 
    * Abrí las **Preferencias del Sistema** de KDE.
    * Navegá a **Atajos** -> **Añadir nuevo** -> **Comando**.
    * Nombre: `KQuickView - Previsualizar`
-   * Comando: `/home/juan/.local/bin/kquickview-selected.sh`
+   * Comando: `/home/juan/.local/bin/kquickview`
    * Asignale la combinación de teclas **Meta+Espacio** (o la combinación que prefieras).
 
 4. **Icono de la Ventana:**

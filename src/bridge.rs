@@ -56,19 +56,19 @@ fn render_markdown(content: &str) -> String {
 
     let css = "<style>
         body { color: #eff0f1; font-family: sans-serif; font-size: 13px; line-height: 1.5; background-color: #121212; }
-        h1, h2, h3, h4 { color: #3daee9; margin-top: 15px; margin-bottom: 8px; font-weight: bold; }
+        h1, h2, h3, h4 { color: #ffffff; margin-top: 15px; margin-bottom: 8px; font-weight: bold; }
         h1 { font-size: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 4px; }
         h2 { font-size: 16px; border-bottom: 1px solid #2a2a2a; padding-bottom: 2px; }
         h3 { font-size: 14px; }
-        code { font-family: monospace; background-color: #2a2a2a; padding: 2px 4px; color: #e74c3c; }
+        code { font-family: monospace; background-color: #2a2a2a; padding: 2px 4px; color: #eff0f1; }
         pre { background-color: #1a1a1a; padding: 8px; border: 1px solid #2a2a2a; }
         pre code { background-color: transparent; padding: 0; color: #eff0f1; }
-        a { color: #3daee9; text-decoration: none; }
+        a { color: #ffffff; text-decoration: underline; }
         ul, ol { margin-top: 5px; margin-bottom: 5px; padding-left: 20px; }
         li { margin-bottom: 2px; }
         table { border-collapse: collapse; width: 100%; margin-top: 10px; margin-bottom: 10px; }
         th, td { border: 1px solid #2a2a2a; padding: 6px; text-align: left; }
-        th { background-color: #1a1a1a; color: #3daee9; }
+        th { background-color: #1a1a1a; color: #ffffff; }
     </style>";
 
     format!("<html><head>{}</head><body>{}</body></html>", css, html_output)
@@ -76,21 +76,32 @@ fn render_markdown(content: &str) -> String {
 
 impl Default for KQuickViewBridgeRust {
     fn default() -> Self {
-        let args: Vec<String> = std::env::args().collect();
-        if args.len() < 2 {
-            return Self {
-                file_path: QString::from(""),
-                file_url: QString::from(""),
-                file_type: QString::from("unknown"),
-                text_content: QString::from("Error: No se especificó ningún archivo.\nUso: kquickview <ruta_al_archivo>"),
-                is_valid: false,
-                files: Vec::new(),
-                current_idx: 0,
-            };
-        }
+        let file_path_opt = std::env::var("KQUICKVIEW_FILE").ok()
+            .or_else(|| {
+                let args: Vec<String> = std::env::args().collect();
+                if args.len() > 1 {
+                    Some(args[1].clone())
+                } else {
+                    None
+                }
+            });
 
-        let path_str = &args[1];
-        let path = Path::new(path_str);
+        let path_str = match file_path_opt {
+            Some(p) => p,
+            None => {
+                return Self {
+                    file_path: QString::from(""),
+                    file_url: QString::from(""),
+                    file_type: QString::from("unknown"),
+                    text_content: QString::from("Error: No se especificó ningún archivo.\nUso: kquickview <ruta_al_archivo>"),
+                    is_valid: false,
+                    files: Vec::new(),
+                    current_idx: 0,
+                };
+            }
+        };
+
+        let path = Path::new(&path_str);
         if !path.exists() {
             return Self {
                 file_path: QString::from(path_str.as_str()),

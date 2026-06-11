@@ -9,6 +9,7 @@ Window {
     height: 600
     title: bridge.file_path ? "KQuickView - " + bridge.file_path.split('/').pop() : "KQuickView"
     color: "#121212"
+    flags: Qt.WindowStaysOnTopHint
 
     KQuickViewBridge {
         id: bridge

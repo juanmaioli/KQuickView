@@ -24,13 +24,9 @@ mkdir -p "$HOME/.local/share/applications"
 mkdir -p "$HOME/.local/share/icons"
 
 # 3. Copiar ejecutables y dar permisos
-echo -e "${BLUE}[3/5] Instalando binarios, scripts e iconos...${NC}"
+echo -e "${BLUE}[3/5] Instalando binarios e iconos...${NC}"
 cp target/release/kquickview "$HOME/.local/bin/kquickview"
 chmod +x "$HOME/.local/bin/kquickview"
-
-# Copiar el script disparador de atajo de teclado
-cp kquickview-selected.sh "$HOME/.local/bin/kquickview-selected.sh"
-chmod +x "$HOME/.local/bin/kquickview-selected.sh"
 
 # Copiar e instalar el icono de la lupa en el sistema
 cp right-pointing_magnifying_glass.png "$HOME/.local/share/icons/kquickview.png"
@@ -49,8 +45,7 @@ chmod +x "$HOME/.local/share/applications/kquickview.desktop"
 echo -e "${GREEN}=== ¡Instalación finalizada con éxito! ===${NC}"
 echo -e "${YELLOW}Notas importantes:${NC}"
 echo -e "1. Asegurate de que ${GREEN}~/.local/bin${NC} esté en tu variable PATH para ejecutar 'kquickview' desde la terminal."
-echo -e "2. El script de atajo global se instaló en: ${GREEN}$HOME/.local/bin/kquickview-selected.sh${NC}"
-echo -e "3. Para configurar el atajo de teclado global en KDE Plasma:"
+echo -e "2. Para configurar el atajo de teclado global en KDE Plasma:"
 echo -e "   - Andá a 'Preferencias del Sistema' -> 'Atajos' -> 'Añadir nuevo' -> 'Comando'."
-echo -e "   - Asigná el comando: ${GREEN}$HOME/.local/bin/kquickview-selected.sh${NC}"
+echo -e "   - Asigná el comando: ${GREEN}$HOME/.local/bin/kquickview${NC}"
 echo -e "   - Configurá la combinación de teclas: ${GREEN}Meta+Espacio${NC}"
