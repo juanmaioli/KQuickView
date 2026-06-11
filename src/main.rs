@@ -7,7 +7,7 @@ use std::thread;
 use std::path::Path;
 
 fn url_decode(input: &str) -> String {
-    let mut decoded = String::new();
+    let mut decoded_bytes = Vec::new();
     let mut bytes = input.as_bytes().iter();
     while let Some(&b) = bytes.next() {
         if b == b'%' {
@@ -15,15 +15,15 @@ fn url_decode(input: &str) -> String {
                 let hex = vec![h1, h2];
                 if let Ok(hex_str) = std::str::from_utf8(&hex) {
                     if let Ok(byte) = u8::from_str_radix(hex_str, 16) {
-                        decoded.push(byte as char);
+                        decoded_bytes.push(byte);
                         continue;
                     }
                 }
             }
         }
-        decoded.push(b as char);
+        decoded_bytes.push(b);
     }
-    decoded
+    String::from_utf8_lossy(&decoded_bytes).into_owned()
 }
 
 fn get_dolphin_selected_file() -> Option<String> {
